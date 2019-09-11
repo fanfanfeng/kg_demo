@@ -1,0 +1,25 @@
+1.利用protege构建本体文件owl
+    生成movie.owl，保存格式为Turtle Syntax
+2.利用d2rq生成mapping文件
+    2.1.下载D2RQ，进入其目录，运行下面的命令生成默认的mapping文件：
+            generate-mapping -u root -p root -o movie_mapping.ttl jdbc:mysql:///kg_demo_movie
+    2.2.修改文件设置IRI前缀
+            例如，http://www.fanfanfeng.com#Person 表达成 :Person,
+    2.3. 使用下面的命令将我们的数据转为RDF
+            .\dump-rdf.bat -o demo_movie.nt .\movie_mapping.ttl
+            (其支持导出的RDF格式有“TURTLE”, “RDF/XML”, “RDF/XML-ABBREV”, “N3”, 和“N-TRIPLE”。“N-TRIPLE”是默认的输出格式。)
+    2.4.  进入d2rq目录，使用下面的命令启动D2R Server
+            d2r-server.bat movie_mapping.ttl
+            可以启动server,测试spaql语句
+3.部署jena服务
+    3.1 下载Jena的最新版本（fuseki和其他的功能模块不在同一个文件中，需要分别下载apache-jena和apache-jena-fuseki）
+    3.2 使用tdbloader.bat将之前我们的RDF数据以TDB的方式存储(最新jena默认是tdb2)
+            .\tdbloader.bat --loc="D:\apache_jena\tdb" "D:\d2rq\demo_movie.nt"
+            “--loc”指定tdb存储的位置，即刚才我们创建的文件夹；第二个参数是由Mysql数据转换得到的RDF数据。
+    3.3 进入入“apache-jena-fuseki-X.X.X”文件夹，运行“fuseki-server.bat”，然后退出。程序会为我们在当前目录自动创建“run”文件夹。
+        将我们的本体文件“ontology.owl”移动到“run”文件夹下的“databases”文件夹中，并将“owl”后缀名改为“ttl”。
+        在“run”文件夹下的“configuration”中，我们创建名为“fuseki_conf.ttl”的文本文件（取名没有要求），
+        最后编辑效果，见文件
+    3.4 将rules.ttl和movie.owl 放到fuseki的run下面的databases下面
+    3.5 启动fuseki-server.bat
+
