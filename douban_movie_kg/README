@@ -1,0 +1,3 @@
+豆瓣电影部署参考movie_kg目录下面的fuseki_config.ttl。修改一下数据集就行
+
+具体参考实现：https://github.com/weizhixiaoyi/DouBan-KGQA
